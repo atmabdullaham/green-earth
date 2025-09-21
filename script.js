@@ -7,16 +7,25 @@ fetch("https://openapi.programming-hero.com/api/categories")
     )
 }
 
+const handleLoadingSpinner = (isLoading)=>{
+    if(isLoading){
+        document.getElementById("loading-div").classList.remove("hidden");
+        document.getElementById("card-box").classList.add("hidden");
+    }else{
+        document.getElementById("loading-div").classList.add("hidden");
+        document.getElementById("card-box").classList.remove("hidden");
+    }
+    
+}
 
 const loadCardsBasedOnCategory = async(id)=>{
     handleRemoveActiveClass()
+    handleLoadingSpinner(true)
     const activeButton = document.getElementById(`button-${id}`);
     activeButton.classList.add("active")
     const url = `https://openapi.programming-hero.com/api/category/${id}`
     const res = await fetch(url);
     const data = await res.json();
-    
-    
     displayAllPlants(data.plants)
     
 }
@@ -84,6 +93,7 @@ loadCategories();
 
 
 const loadAllTrees = async() =>{
+    handleLoadingSpinner(true)
     const url = "https://openapi.programming-hero.com/api/plants"
     const res = await fetch(url);
     const data = await res.json();
@@ -106,9 +116,9 @@ const handleAddToCart = async(plant)=>{
     <div id=${data.plants.id} class="bg-green-100 p-3 rounded-lg flex justify-between items-center">
       <div>
          <h3 class="text-sm font-semibold">${name}</h3>
-         <h4 class="text-lg font-normal text-gray-500">৳${price} × 1</h4>
+         <h4 class="text-lg font-normal text-gray-500">৳<span id="price${data.plants.id}">${price}</span> × 1</h4>
       </div>
-      <span><i class="fa-solid fa-xmark" style="color: #f70202;"></i></span>
+      <span onclick="handleDeleteItemFromCart(${data.plants.id})"><i class="fa-solid fa-xmark" style="color: #f70202;"></i></span>
     </div>
     `
     cartDiv.append(plantDiv)
@@ -117,16 +127,20 @@ const handleAddToCart = async(plant)=>{
 
 const handleDeleteItemFromCart = (id)=>{
     const itemToBeDeleted = document.getElementById(id);
+    const priceString = document.getElementById(`price${id}`).innerText;
+    const priceToBeDeducted = parseFloat(priceString);
+    const priceSpan = document.getElementById("total-price");
+    const previousPrice = parseFloat(priceSpan.innerText);
+    const newPrice = previousPrice - priceToBeDeducted;
+    priceSpan.innerText = newPrice;
     itemToBeDeleted.remove();
 }
 
 const calculateTotalPrice = (price) =>{
-    console.log(price);
     const priceSpan = document.getElementById("total-price");
     const previousPrice = parseFloat(priceSpan.innerText);
     const newPrice = previousPrice + price;
     priceSpan.innerText = newPrice;
-    console.log(previousPrice);
 }
 
 const displayAllPlants = (plants)=>{
@@ -152,8 +166,7 @@ const displayAllPlants = (plants)=>{
                           </div>
                         </div>
         `
-        cardBox.append(cardDiv)
-                        
-                     
+        cardBox.append(cardDiv)           
     }
+    handleLoadingSpinner(false)
 }
