@@ -155,7 +155,7 @@ const displayAllPlants = (plants)=>{
                         </figure>
                         <div class="card-body">
                           <h2 onclick="showDetails(${plant.id})" class="card-title text-gray-800 hover:cursor-pointer">${plant.name}</h2>
-                          <p class="text-md font-normal text-gray-600">${plant.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
+                          <p class="text-md font-normal text-gray-600">${plant.description.length > 100 ? plant.description.substring(0, 100) + "..." : plant.description}</p>
                           <div class="flex justify-between items-center pt-2">
                             <button class="bg-green-100 px-3 py-1 rounded-full text-green-700 font-medium">${plant.category}</button>
                             <span class="text-sm font-semibold text-gray-800"><i class="fa-solid fa-bangladeshi-taka-sign fa-xs font-extralight"></i>${plant.price}</span>
