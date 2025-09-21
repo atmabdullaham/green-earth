@@ -110,13 +110,12 @@ const handleAddToCart = async(plant)=>{
     const name = data.plants.name;
     const price = data.plants.price;
     calculateTotalPrice(price);
-
     const plantDiv = document.createElement("div");
     plantDiv.innerHTML = `
     <div id=${data.plants.id} class="bg-green-100 p-3 rounded-lg flex justify-between items-center">
       <div>
          <h3 class="text-sm font-semibold">${name}</h3>
-         <h4 class="text-lg font-normal text-gray-500">৳<span id="price${data.plants.id}">${price}</span> × 1</h4>
+         <h4 class="text-lg font-normal text-gray-500"><i class="fa-solid fa-bangladeshi-taka-sign fa-xs font-extralight"></i><span id="price${data.plants.id}">${price}</span> × 1</h4>
       </div>
       <span onclick="handleDeleteItemFromCart(${data.plants.id})"><i class="fa-solid fa-xmark" style="color: #f70202;"></i></span>
     </div>
@@ -148,20 +147,20 @@ const displayAllPlants = (plants)=>{
     cardBox.innerHTML = ""
     for(let plant of plants){
         const cardDiv = document.createElement("div");
-        cardDiv.classList.add("card" , "bg-base-100", "shadow-sm");
+        cardDiv.classList.add("card" , "bg-base-100", "shadow-sm" ,"max-h-fit");
         cardDiv.innerHTML = `
                        <figure class="px-4 pt-4">
                           <img src=${plant.image} alt="Plant"
-                            class="rounded-xl h-72 w-full object-cover overflow-hidden" />
+                            class="rounded-xl h-64 w-full object-cover overflow-hidden" />
                         </figure>
                         <div class="card-body">
                           <h2 onclick="showDetails(${plant.id})" class="card-title text-gray-800 hover:cursor-pointer">${plant.name}</h2>
-                          <p class="text-md font-normal text-gray-600">${plant.description}</p>
+                          <p class="text-md font-normal text-gray-600">${plant.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
                           <div class="flex justify-between items-center pt-2">
                             <button class="bg-green-100 px-3 py-1 rounded-full text-green-700 font-medium">${plant.category}</button>
-                            <span class="text-sm font-semibold text-gray-800">৳${plant.price}</span>
+                            <span class="text-sm font-semibold text-gray-800"><i class="fa-solid fa-bangladeshi-taka-sign fa-xs font-extralight"></i>${plant.price}</span>
                           </div>
-                          <div class="card-actions pt-3">
+                          <div class="card-actions pt-2">
                             <button onclick="handleAddToCart(${plant.id})" class="btn w-full bg-green-700 rounded-full text-white text-[16px] font-medium">Add to Cart</button>
                           </div>
                         </div>
